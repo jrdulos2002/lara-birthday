@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>For Lara 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
@@ -209,9 +212,12 @@ canvas#fx{position:absolute;inset:0;z-index:80;pointer-events:none}
 #finaleMsg{position:absolute;top:60%;left:50%;transform:translateX(-50%);z-index:42;
   font-family:sans-serif;text-align:center;opacity:0;transition:opacity 1.6s;width:88%}
 #finaleMsg.show{opacity:1}
-#finaleMsg .big{font-size:clamp(1.6rem,6vw,2.6rem);font-weight:700;font-style:italic;color:#ffd9e8;
-  text-shadow:0 0 24px rgba(255,111,165,.7)}
-#finaleMsg .small{margin-top:8px;font-size:.85rem;color:#e9c9d6}
+#finaleMsg .script{font-family:'Pacifico','Brush Script MT',cursive;font-size:clamp(2.4rem,11vw,4.6rem);
+  line-height:1.25;background:linear-gradient(95deg,#ffd166 5%,#ff9ebe 45%,#ff6f9c 90%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 22px rgba(255,111,165,.65))}
+#finaleMsg .small{margin-top:14px;font-size:clamp(.95rem,3.5vw,1.2rem);letter-spacing:.24em;
+  text-transform:uppercase;color:#ffd9e8;text-shadow:0 0 18px rgba(255,111,165,.6)}
 
 </style>
 </head>
@@ -368,8 +374,8 @@ canvas#fx{position:absolute;inset:0;z-index:80;pointer-events:none}
     </div>
 
     <div id="finaleMsg">
-      <div class="big">I love you 💖</div>
-      <div class="small">happy bday babyy</div>
+      <div class="script">happy bday babyy</div>
+      <div class="small">I love you 💖</div>
     </div>
   </div>
 
