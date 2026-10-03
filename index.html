@@ -645,9 +645,14 @@ lighter.addEventListener("pointermove",e=>{
       flameCores[i].style.opacity=1; flameCores[i].classList.add("lit");
       spawn(wx,wy-4,12,["#ffb703","#ffe08a","#fff"],4);
       if(++litCount===wicks.length){
-        candlesLit=true; blowHint.classList.add("show");
+        blowHint.textContent="close your eyes… make a wish first 🌟";
+        blowHint.classList.add("show");
         lighter.style.opacity=0; lighter.style.transition="opacity .8s";
         setTimeout(()=>{lighter.style.display="none";},850);
+        setTimeout(()=>{
+          blowHint.textContent="\uD83D\uDD6F\uFE0F now tap the cake to blow\u2026";
+          candlesLit=true;
+        },15000);
       }
     }
   });
