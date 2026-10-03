@@ -11,6 +11,11 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{font-family:'Georgia','Segoe UI',serif;background:#0d0410;color:#fff;user-select:none;touch-action:none}
+#ytPlayer{position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;pointer-events:none}
+#musicBtn{position:fixed;right:14px;bottom:14px;z-index:60;width:46px;height:46px;border-radius:50%;
+  border:none;background:rgba(20,10,16,.55);color:#ffd9e8;font-size:1.25rem;cursor:pointer;
+  backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .5s}
+#musicBtn.show{opacity:1;pointer-events:auto}
 #stage{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden}
 .scene{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column}
 .scene.active{display:flex}
@@ -381,9 +386,44 @@ canvas#fx{position:absolute;inset:0;z-index:80;pointer-events:none}
 
   <canvas id="fx"></canvas>
 </div>
+<div id="ytPlayer"></div>
+<button id="musicBtn" onclick="toggleMusic()" aria-label="play song">🎵</button>
 
 
 <script>
+/* ===== song: "Lara" by Leonora — plays from curtain open until the cake explodes ===== */
+let yt=null, ytReady=false, ytWantPlay=false, ytPlaying=false;
+function onYouTubeIframeAPIReady(){
+  yt=new YT.Player('ytPlayer',{videoId:'3UKmLakqoCc',
+    playerVars:{playsinline:1},
+    events:{
+      onReady:()=>{ ytReady=true; if(ytWantPlay){ yt.playVideo(); } },
+      onStateChange:e=>{ ytPlaying=(e.data===YT.PlayerState.PLAYING);
+        const b=document.getElementById("musicBtn");
+        b.textContent = ytPlaying ? "🔊" : "🎵"; }
+    }});
+}
+function loadYT(){
+  if(window.YT && YT.Player){ onYouTubeIframeAPIReady(); return; }
+  if(document.getElementById("ytapi")) return;
+  const s=document.createElement("script"); s.id="ytapi";
+  s.src="https://www.youtube.com/iframe_api";
+  document.head.appendChild(s);
+}
+function ytPlay(){
+  if(!yt||!ytReady){ ytWantPlay=true; loadYT(); return; }
+  yt.playVideo();
+}
+function ytStop(){
+  ytWantPlay=false;
+  if(yt&&ytReady) try{ yt.stopVideo(); }catch(e){}
+  const b=document.getElementById("musicBtn"); if(b) b.textContent="🎵";
+}
+function toggleMusic(){
+  if(ytPlaying){ yt.pauseVideo(); }
+  else{ ytWantPlay=true; loadYT(); if(yt&&ytReady) yt.playVideo(); }
+}
+
 /* ============== CONFIG ============== */
 
 const PHOTOS = [
@@ -398,6 +438,7 @@ const PHOTOS = [
 ];
 /* ====================================== */
 
+loadYT();
 function showScene(id){
   document.querySelectorAll(".scene").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -475,6 +516,8 @@ function enableCurtainSwipe(){
   }
   function finishOpen(){
     curtainOpenedYet=true;
+    document.getElementById("musicBtn").classList.add("show");
+    ytPlay();
     document.getElementById("swipeHint").classList.remove("show");
     left.style.transform=""; right.style.transform="";
     left.classList.add("swing"); right.classList.add("swing");
@@ -624,6 +667,8 @@ function messSplatter(){
       background:${cols[i%cols.length]};transform:translate(-50%,-50%) rotate(${Math.random()*360}deg)"></div>`;
   }
   overlay.innerHTML=html;
+  ytStop();                                                          // song ends with the cake
+  document.getElementById("musicBtn").classList.remove("show");
   requestAnimationFrame(()=>{overlay.style.opacity=1;});           // screen gets covered in frosting
   document.getElementById("envelopeLayer").classList.add("revealed"); // envelope waits underneath
   document.getElementById("cakeInner").style.opacity=0;              // cake & hint fade away
