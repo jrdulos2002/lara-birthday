@@ -667,8 +667,6 @@ function messSplatter(){
       background:${cols[i%cols.length]};transform:translate(-50%,-50%) rotate(${Math.random()*360}deg)"></div>`;
   }
   overlay.innerHTML=html;
-  ytStop();                                                          // song ends with the cake
-  document.getElementById("musicBtn").classList.remove("show");
   requestAnimationFrame(()=>{overlay.style.opacity=1;});           // screen gets covered in frosting
   document.getElementById("envelopeLayer").classList.add("revealed"); // envelope waits underneath
   document.getElementById("cakeInner").style.opacity=0;              // cake & hint fade away
@@ -772,6 +770,8 @@ function tapBox(){
   setTimeout(()=>{
     document.querySelectorAll(".filmStrip").forEach(s=>s.classList.add("show"));
     document.getElementById("finaleMsg").classList.add("show");
+    ytStop();                                   // hand over to the music box
+    document.getElementById("musicBtn").classList.remove("show");
     clockworkHappyBirthday();
   },600);
 }
