@@ -273,7 +273,9 @@ canvas#fx{position:absolute;inset:0;z-index:80;pointer-events:none}
         <div class="env-back"></div>
         <div class="env-paper" id="letterPaper">
           <div class="letter-dear">My dearest Lara,</div>
-          <div id="letterMsg">Happy birthday, my baby! Wishing you all the best in life (and that includes me, hehe). Belated anniversary, my sweetie pie. I will always be here with you, through life and death. I miss you, and I love you.</div>
+          <div id="letterMsg">Happy birthday, my baby! Wishing you all the best in life (and that includes me, hehe). Belated anniversary, my sweetie pie. I will always be here with you, through life and death. I miss you, and I love you.
+
+Should the day ever come that we are not together, you will continue to shine like gold in my memories. I love you, bebi. Happy birthday again.</div>
           <div class="letter-sign">— always yours</div>
           <div class="foldHint">tap the letter to fold it back 💌</div>
         </div>
@@ -703,16 +705,23 @@ function messSplatter(){
   document.getElementById("envelopeLayer").classList.add("revealed"); // envelope waits underneath
   document.getElementById("cakeInner").style.opacity=0;              // cake & hint fade away
   lighter.style.opacity=0; lighter.style.transition="opacity .8s";   // lighter too
+  const hint=document.getElementById("envTapHint");
+  hint.textContent="hold on\u2026 your letter is on its way \uD83D\uDC8C";     // tease while locked
   setTimeout(()=>{
     overlay.classList.add("wiped");                                  // frosting slides down…
-    document.getElementById("envTapHint").style.opacity=1;             // …revealing the envelope
+    hint.style.opacity=1;                                           // envelope revealed but locked
+    setTimeout(()=>{
+      hint.textContent="tap the envelope \uD83D\uDC8C";
+      envUnlocked=true;                                             // 30s wait before the letter opens
+    },30000);
   }, 1600);
 }
 
 /* envelope: tap closed -> open (locked while animating) ; tap open paper -> fold back -> cat -> finale */
 let envOpen=false, envBusy=false;
+let envUnlocked=false;
 function handleEnvelope(e){
-  if(envBusy)return;
+  if(envBusy||!envUnlocked)return;
   const env=document.getElementById("envelope");
   if(!envOpen){
     envBusy=true; envOpen=true; env.classList.add("open");
